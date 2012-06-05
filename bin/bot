@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require 'net/yail'
+require 'open-uri'
+
+NICK = ARGV[0]
+
+API_KEY = "e868aaccac147f358241a5b9f6b46c0a"
+URL = 
+
+CHANNELS = %w[#heyaudy #grooveshark]
+
+# generate query url for a song
+def get_song_url(s)
+  URI.escape "http://tinysong.com/a/#{s}?key=#{API_KEY}"
+end
+
+irc = Net::YAIL.new(
+  :address => 'irc.freenode.net',
+  :username => NICK,
+  :realname => NICK,
+  :nicknames => [ NICK ]
+)
+
+irc.on_welcome do |event|
+  CHANNELS.each { |x| irc.join(x) }
+end
+
+irc.on_msg do |event|
+  if event.channel && event.message.match(/!songme/i)
+
+    query    = event.message.gsub('!songme', '')
+    song_url = get_song_url(query)
+    resp     = open(song_url).gets
+    $stderr.puts resp.inspect
+    unless resp == "NSF;"
+      irc.msg event.channel, resp
+    else
+      irc.msg event.channel, "Try Spotify."
+    end
+  end
+
+end
+
+irc.start_listening!
