@@ -36,6 +36,8 @@ irc.on_msg do |event|
       begin # fix for shitty JSON
         resp = JSON.parse(resp)
       rescue Exception => exc
+        $stderr.puts "song_url: #{song_url}"
+        $stderr.puts "resp: #{resp}"
         []
       end
 
