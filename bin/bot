@@ -31,7 +31,14 @@ irc.on_msg do |event|
     query    = event.message.gsub('!songme', '')
     song_url = get_song_url(query)
     resp     = open(song_url).gets
-    resp     = JSON.parse(resp)
+
+    begin
+      resp = JSON.parse(resp)
+    rescue Exception => exc
+      irc.msg event.channel, "Got fuggered JSON: #{resp}"
+      break
+    end
+
     unless resp == []
       irc.msg event.channel, "#{resp['Url']} #{resp['SongName']} - #{resp['ArtistName']}"
     else
