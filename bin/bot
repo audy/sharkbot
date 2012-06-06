@@ -44,7 +44,7 @@ irc.on_msg do |event|
     unless resp == []
       irc.msg event.channel, "#{resp['Url']} #{resp['SongName']} - #{resp['ArtistName']}"
     else
-      irc.msg event.channel, "#{event.nick}: Try Spotify."
+      irc.msg event.channel, "#{event.nick}: 404"
     end
   end
 
