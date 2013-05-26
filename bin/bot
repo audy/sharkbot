@@ -7,7 +7,7 @@ require 'json'
 NICK = ARGV[0]
 
 API_KEY = "e868aaccac147f358241a5b9f6b46c0a"
-CHANNELS = %w[#heyaudy #grooveshark]
+CHANNELS = %w[#heyaudy #grooveshark #elliottcable]
 
 # generate query url for a song
 def get_song_url(s)
